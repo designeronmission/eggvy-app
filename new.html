@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Activity Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.4;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+        
+        .stats-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 180px;
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            padding: 18px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #86868b;
+            font-weight: 500;
+        }
+        
+        .money-section {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .money-box {
+            flex: 1;
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            padding: 18px;
+        }
+        
+        .money-title {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .money-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000000;
+        }
+        
+        .promo-section {
+            background-color: #000000;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+        
+        .promo-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .promo-text {
+            font-size: 14px;
+            color: #d2d2d7;
+            margin-bottom: 18px;
+        }
+        
+        .apply-button {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .apply-button:hover {
+            opacity: 0.9;
+        }
+        
+        .bills-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+        
+        .bill-item {
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .bill-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+        }
+        
+        .bill-date {
+            font-size: 14px;
+            color: #86868b;
+            background-color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .bill-details {
+            margin-bottom: 12px;
+        }
+        
+        .card-number {
+            font-size: 15px;
+            color: #515154;
+            letter-spacing: 0.5px;
+        }
+        
+        .bill-description {
+            font-size: 15px;
+            color: #515154;
+        }
+        
+        .bill-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000000;
+            text-align: right;
+        }
+        
+        .today {
+            background-color: #ff3b30;
+            color: #ffffff;
+        }
+        
+        .due-soon {
+            background-color: #ff9500;
+            color: #ffffff;
+        }
+        
+        /* Beyond Cash Benefits Section Styles */
+        .benefits-section {
+            margin-bottom: 30px;
+        }
+        
+        .benefits-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .benefit-item {
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .benefit-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+        
+        .benefit-description {
+            font-size: 13px;
+            color: #86868b;
+            line-height: 1.4;
+        }
+        
+        .benefit-feature {
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+        
+        .feature-description {
+            font-size: 15px;
+            color: #515154;
+            line-height: 1.5;
+        }
+        
+        .section-divider {
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
+        }
+        
+        .section-divider:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e5e5e7;
+            z-index: 1;
+        }
+        
+        .divider-text {
+            display: inline-block;
+            background-color: #ffffff;
+            padding: 0 16px;
+            font-size: 14px;
+            color: #86868b;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cash-fast-section {
+            background-color: #000000;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+        
+        .cash-fast-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .cash-fast-text {
+            font-size: 15px;
+            color: #d2d2d7;
+            line-height: 1.5;
+        }
+        
+        .fuel-section {
+            margin-bottom: 30px;
+        }
+        
+        .fuel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+        
+        .fuel-offer {
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .offer-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+        
+        .offer-description {
+            font-size: 15px;
+            color: #515154;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+        
+        .claim-button {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .claim-button:hover {
+            opacity: 0.9;
+        }
+        
+        .fuel-deals {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .fuel-deal {
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            padding: 18px;
+        }
+        
+        .deal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .deal-badge {
+            background-color: #000000;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+        
+        .deal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000000;
+        }
+        
+        .deal-description {
+            font-size: 15px;
+            color: #515154;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #86868b;
+            border-top: 1px solid #e5e5e7;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .content {
+                padding: 16px;
+            }
+            
+            .stats-section, .money-section {
+                flex-direction: column;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <!-- Original Financial Activity Section -->
+            <div class="header">Financial Activity Overview</div>
+            
+            <div class="stats-section">
+                <div class="stat-box">
+                    <div class="stat-value">$1,500</div>
+                    <div class="stat-label">AVG. Daily</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-value">$2,300</div>
+                    <div class="stat-label">AVG. Monthly</div>
+                </div>
+            </div>
+            
+            <div class="money-section">
+                <div class="money-box">
+                    <div class="money-title">Money IN</div>
+                    <div class="money-value">$1,000</div>
+                </div>
+                
+                <div class="money-box">
+                    <div class="money-title">Money OUT</div>
+                    <div class="money-value">$2,200</div>
+                </div>
+            </div>
+            
+            <div class="promo-section">
+                <div class="promo-title">Instant funds. Simple process</div>
+                <div class="promo-text">Get up to $1200 credit on bank</div>
+                <button class="apply-button">Apply Now</button>
+            </div>
+            
+            <div class="bills-section">
+                <div class="section-title">Bills & Reminder</div>
+                
+                <div class="bill-item">
+                    <div class="bill-header">
+                        <div class="bill-title">Credit Card Bills</div>
+                        <div class="bill-date today">Today</div>
+                    </div>
+                    
+                    <div class="bill-details">
+                        <div class="card-number">9879 **** **** 098</div>
+                    </div>
+                    
+                    <div class="bill-amount">$230.00</div>
+                </div>
+                
+                <div class="bill-item">
+                    <div class="bill-header">
+                        <div class="bill-title">Subscriptions</div>
+                        <div class="bill-date due-soon">Due in 2 days</div>
+                    </div>
+                    
+                    <div class="bill-details">
+                        <div class="bill-description">Spotify subscription payment of $19.99</div>
+                    </div>
+                    
+                    <div class="bill-amount">$19.99</div>
+                </div>
+            </div>
+            
+            <!-- Beyond Cash Benefits Section -->
+            <div class="benefits-section">
+                <div class="benefits-header">Beyond Cash Benefits</div>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-title">Fuel Discounts</div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-title">Cash Advance</div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-title">Cash Cover up to $1,XXX</div>
+                        <div class="benefit-description">Instant cash support during emergencies or urgent needs</div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-title">Legal Club</div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-title">Telemedicine</div>
+                    </div>
+                </div>
+                
+                <div class="section-divider">
+                    <div class="divider-text">The picks that fit you</div>
+                </div>
+                
+                <div class="cash-fast-section">
+                    <div class="cash-fast-title">Need Cash Fast?</div>
+                    <div class="cash-fast-text">Get approved and receive up to $500 fast, right when it matters.</div>
+                </div>
+                
+                <div class="fuel-section">
+                    <div class="fuel-title">Save More on Fuel</div>
+                    
+                    <div class="fuel-offer">
+                        <div class="offer-title">Exclusive fuel discounts</div>
+                        <div class="offer-description">Unlock exclusive fuel discounts available for a limited time. Pay less at the pump and go further on every drive.</div>
+                        <button class="claim-button">Claim Now</button>
+                    </div>
+                    
+                    <div class="fuel-deals">
+                        <div class="fuel-deal">
+                            <div class="deal-header">
+                                <div class="deal-badge">SX</div>
+                                <div class="deal-title">Off Per Litre</div>
+                            </div>
+                            <div class="deal-description">Enjoy a flat discount on every litre of fuel. No points, no waiting—just instant savings at the pump</div>
+                        </div>
+                        
+                        <div class="fuel-deal">
+                            <div class="deal-header">
+                                <div class="deal-badge">Fuel & Get</div>
+                                <div class="deal-title">Cashback</div>
+                            </div>
+                            <div class="deal-description">Fill up your tank and get instant cashback on every fuel purchase. More savings every time you drive</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Financial Activity Overview • All rights reserved</p>
+        </div>
+    </div>
+
+    <script>
+        // Make the Apply Now button interactive
+        document.querySelectorAll('.apply-button').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('Application form would open here. This is a design demonstration.');
+            });
+        });
+        
+        // Make the Claim Now button interactive
+        document.querySelector('.claim-button').addEventListener('click', function() {
+            alert('Fuel discount claim initiated. This is a design demonstration.');
+        });
+        
+        // Add hover effects to benefit items
+        const benefitItems = document.querySelectorAll('.benefit-item, .fuel-deal, .fuel-offer');
+        benefitItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.transition = 'transform 0.2s ease';
+                this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+        
+        // Add hover effect to cash-fast section
+        const cashFastSection = document.querySelector('.cash-fast-section');
+        cashFastSection.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.01)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        cashFastSection.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        // Simulate live updating of financial data
+        function updateFinancialData() {
+            const moneyIn = document.querySelectorAll('.money-value')[0];
+            const moneyOut = document.querySelectorAll('.money-value')[1];
+            
+            // Generate small random changes for demo
+            const randomChangeIn = (Math.random() * 30 - 15).toFixed(2);
+            const randomChangeOut = (Math.random() * 30 - 15).toFixed(2);
+            
+            // Extract current values
+            const currentIn = parseFloat(moneyIn.textContent.replace('$', '').replace(',', ''));
+            const currentOut = parseFloat(moneyOut.textContent.replace('$', '').replace(',', ''));
+            
+            // Update values with formatting
+            const newIn = (currentIn + parseFloat(randomChangeIn)).toFixed(2);
+            const newOut = (currentOut + parseFloat(randomChangeOut)).toFixed(2);
+            
+            moneyIn.textContent = '$' + newIn;
+            moneyOut.textContent = '$' + newOut;
+            
+            // Highlight the change briefly
+            moneyIn.style.color = '#007AFF';
+            moneyOut.style.color = '#007AFF';
+            
+            setTimeout(() => {
+                moneyIn.style.color = '#000000';
+                moneyOut.style.color = '#000000';
+            }, 500);
+        }
+        
+        // Update data every 30 seconds
+        setInterval(updateFinancialData, 30000);
+        
+        // Add date to the footer
+        const today = new Date();
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        const dateString = today.toLocaleDateString('en-US', options);
+        document.querySelector('.footer p').textContent = `Financial Activity Overview • ${dateString}`;
+    </script>
+</body>
+</html>

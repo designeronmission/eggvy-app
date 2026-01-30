@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: white;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+/* Header */
+.header {
+    background: #3D0461;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.date-selector {
+    background: white;
+    border-radius: 2px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calendar-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.date-selector span {
+    font-weight: 600;
+    font-size: 14px;
+    color: black;
+}
+
+.header-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Category Section */
+.category-section {
+    margin-bottom: 20px;
+}
+
+.category-header {
+    background: #F8EEFF;
+    border-radius: 5px;
+    padding: 20px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.category-header:hover {
+    background: #f0e0ff;
+}
+
+.category-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.category-icon {
+    width: 33px;
+    height: 33px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.category-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+}
+
+.category-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.available-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 12px;
+    color: #5f5f5f;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.chevron {
+    width: 9px;
+    height: 15px;
+    transition: transform 0.3s ease;
+}
+
+.chevron.open {
+    transform: rotate(90deg);
+}
+
+/* Category Content */
+.category-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.category-content.open {
+    max-height: 1000px;
+}
+
+/* Budget Item */
+.budget-item {
+    background: #FDFAFF;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 14px;
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.item-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.item-icon {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.item-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: black;
+}
+
+/* Amount Input */
+.amount-input-wrapper {
+    background: white;
+    border: 1px solid white;
+    border-radius: 114px;
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    box-shadow: -1px 1px 3px 0px inset rgba(0,0,0,0.25), 1px -1px 3px 0px inset rgba(0,0,0,0.25);
+    transition: border-color 0.3s ease;
+}
+
+.amount-input-wrapper:focus-within {
+    border-color: #47106b;
+}
+
+.dollar-sign {
+    font-size: 12px;
+    font-weight: 600;
+    color: black;
+}
+
+.amount-input {
+    border: none;
+    outline: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: black;
+    font-family: 'Roboto', sans-serif;
+    width: 60px;
+    background: transparent;
+}
+
+/* Remove number input arrows */
+.amount-input::-webkit-outer-spin-button,
+.amount-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.amount-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Progress Bar */
+.progress-bar {
+    background: #E9E9E9;
+    height: 15px;
+    border-radius: 7.5px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    background: #47106B;
+    height: 100%;
+    border-radius: 70px;
+    transition: width 0.3s ease;
+}
+
+/* Status Text */
+.status-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #47106B;
+    margin-top: 8px;
+}
+
+.status-text sup {
+    font-size: 9px;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .container {
+        max-width: 100%;
+    }
+    
+    body {
+        padding: 10px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="date-selector">
+                <svg class="calendar-icon" viewBox="0 0 20 20" fill="none">
+                    <path d="M6.25 1.25V3.75M13.75 1.25V3.75M2.5 7.5H17.5M3.75 3.75H16.25C17.0784 3.75 17.75 4.42157 17.75 5.25V16.25C17.75 17.0784 17.0784 17.75 16.25 17.75H3.75C2.92157 17.75 2.25 17.0784 2.25 16.25V5.25C2.25 4.42157 2.92157 3.75 3.75 3.75Z" fill="#58237A"/>
+                </svg>
+                <span>Nov 2025</span>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn filter-btn">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="16" fill="white"/>
+                        <path d="M7 11H25M10 16H22M13 21H19" stroke="#3D0461" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="icon-btn edit-btn">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="16" fill="white"/>
+                        <path d="M19.5 8.5L23.5 12.5L14 22H10V18L19.5 8.5Z" fill="#3D0461"/>
+                        <path d="M17 10L22 15" stroke="#3D0461" stroke-width="2"/>
+                    </svg>
+                </button>
+                <button class="icon-btn menu-btn">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="16" fill="white"/>
+                        <circle cx="16" cy="10" r="1.5" fill="#3D0461"/>
+                        <circle cx="16" cy="16" r="1.5" fill="#3D0461"/>
+                        <circle cx="16" cy="22" r="1.5" fill="#3D0461"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bills Section -->
+        <div class="category-section">
+            <div class="category-header" onclick="toggleSection('bills')">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <path d="M3 3H17V17H3V3ZM5 5V15H15V5H5ZM7 7H13V9H7V7ZM7 11H13V13H7V11Z" fill="#501A72"/>
+                        </svg>
+                    </div>
+                    <h2>Bills</h2>
+                </div>
+                <div class="category-right">
+                    <div class="available-text">
+                        <span>Available</span>
+                        <span>to Spend</span>
+                    </div>
+                    <svg class="chevron" id="bills-chevron" viewBox="0 0 9 15" fill="none">
+                        <path d="M1 1L7.5 7.5L1 14" fill="#151515"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-content" id="bills-content">
+                <!-- Phone -->
+                <div class="budget-item">
+                    <div class="item-header">
+                        <div class="item-left">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 18 18" fill="none">
+                                    <path d="M5 2H13C13.5523 2 14 2.44772 14 3V15C14 15.5523 13.5523 16 13 16H5C4.44772 16 4 15.5523 4 15V3C4 2.44772 4.44772 2 5 2Z" fill="#5F2B80"/>
+                                </svg>
+                            </div>
+                            <span class="item-name">Phone</span>
+                        </div>
+                        <div class="amount-input-wrapper">
+                            <span class="dollar-sign">$</span>
+                            <input type="number" class="amount-input" value="1000.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 46%"></div>
+                    </div>
+                    <p class="status-text">$1000.00 more needed by the 30<sup>th</sup> Dec</p>
+                </div>
+
+                <!-- Rent -->
+                <div class="budget-item">
+                    <div class="item-header">
+                        <div class="item-left">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 18 18" fill="none">
+                                    <path d="M9 2L2 7V16H7V11H11V16H16V7L9 2Z" fill="#5F2B80"/>
+                                </svg>
+                            </div>
+                            <span class="item-name">Rent</span>
+                        </div>
+                        <div class="amount-input-wrapper">
+                            <span class="dollar-sign">$</span>
+                            <input type="number" class="amount-input" value="1800.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 73%"></div>
+                    </div>
+                    <p class="status-text">Assigned</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wants Section -->
+        <div class="category-section">
+            <div class="category-header" onclick="toggleSection('wants')">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="8" r="3" fill="#501A72"/>
+                            <path d="M5 18C5 14.6863 7.68629 12 11 12H9C12.3137 12 15 14.6863 15 18" fill="#501A72"/>
+                        </svg>
+                    </div>
+                    <h2>Wants</h2>
+                </div>
+                <div class="category-right">
+                    <div class="available-text">
+                        <span>Available</span>
+                        <span>to Spend</span>
+                    </div>
+                    <svg class="chevron" id="wants-chevron" viewBox="0 0 9 15" fill="none">
+                        <path d="M1 1L7.5 7.5L1 14" fill="#151515"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-content" id="wants-content">
+                <!-- Hotel -->
+                <div class="budget-item">
+                    <div class="item-header">
+                        <div class="item-left">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 16 14" fill="none">
+                                    <path d="M14 0H2C0.9 0 0 0.9 0 2V12C0 13.1 0.9 14 2 14H14C15.1 14 16 13.1 16 12V2C16 0.9 15.1 0 14 0ZM5 10C3.9 10 3 9.1 3 8C3 6.9 3.9 6 5 6C6.1 6 7 6.9 7 8C7 9.1 6.1 10 5 10ZM13 10H9V8H13V10Z" fill="#501A72"/>
+                                </svg>
+                            </div>
+                            <span class="item-name">Hotel</span>
+                        </div>
+                        <div class="amount-input-wrapper">
+                            <span class="dollar-sign">$</span>
+                            <input type="number" class="amount-input" value="0.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Entertainment -->
+                <div class="budget-item">
+                    <div class="item-header">
+                        <div class="item-left">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 18 18" fill="none">
+                                    <path d="M9 2L2 7V16H7V11H11V16H16V7L9 2Z" fill="#5F2B80"/>
+                                </svg>
+                            </div>
+                            <span class="item-name">Entertainment</span>
+                        </div>
+                        <div class="amount-input-wrapper">
+                            <span class="dollar-sign">$</span>
+                            <input type="number" class="amount-input" value="0.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Needs Section -->
+        <div class="category-section">
+            <div class="category-header" onclick="toggleSection('needs')">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <path d="M3 3H17V17H3V3ZM5 5V15H15V5H5Z" fill="#501A72"/>
+                        </svg>
+                    </div>
+                    <h2>Needs</h2>
+                </div>
+                <div class="category-right">
+                    <div class="available-text">
+                        <span>Available</span>
+                        <span>to Spend</span>
+                    </div>
+                    <svg class="chevron" id="needs-chevron" viewBox="0 0 9 15" fill="none">
+                        <path d="M1 1L7.5 7.5L1 14" fill="#151515"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-content" id="needs-content">
+                <!-- Transportation -->
+                <div class="budget-item">
+                    <div class="item-header">
+                        <div class="item-left">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 16 14" fill="none">
+                                    <path d="M14 0H2C0.9 0 0 0.9 0 2V12C0 13.1 0.9 14 2 14H14C15.1 14 16 13.1 16 12V2C16 0.9 15.1 0 14 0ZM5 10C3.9 10 3 9.1 3 8C3 6.9 3.9 6 5 6C6.1 6 7 6.9 7 8C7 9.1 6.1 10 5 10ZM13 10H9V8H13V10Z" fill="#501A72"/>
+                                </svg>
+                            </div>
+                            <span class="item-name">Transportation</span>
+                        </div>
+                        <div class="amount-input-wrapper">
+                            <span class="dollar-sign">$</span>
+                            <input type="number" class="amount-input" value="0.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Emergency Fund -->
+                <div class="budget-item">
+                    <div class="item-header">
+                        <div class="item-left">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 18 18" fill="none">
+                                    <path d="M9 2L2 7V16H7V11H11V16H16V7L9 2Z" fill="#5F2B80"/>
+                                </svg>
+                            </div>
+                            <span class="item-name">Emergency Fund</span>
+                        </div>
+                        <div class="amount-input-wrapper">
+                            <span class="dollar-sign">$</span>
+                            <input type="number" class="amount-input" value="0.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle accordion sections
+function toggleSection(sectionId) {
+    const content = document.getElementById(`${sectionId}-content`);
+    const chevron = document.getElementById(`${sectionId}-chevron`);
+    
+    // Toggle the open class
+    content.classList.toggle('open');
+    chevron.classList.toggle('open');
+}
+
+// Initialize all sections as closed
+document.addEventListener('DOMContentLoaded', function() {
+    // Optional: Open the first section by default
+    // toggleSection('bills');
+    
+    // Format amount inputs on blur
+    const amountInputs = document.querySelectorAll('.amount-input');
+    amountInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (!isNaN(value)) {
+                this.value = value.toFixed(2);
+            } else {
+                this.value = '0.00';
+            }
+        });
+        
+        // Allow Enter key to blur the input
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                this.blur();
+            }
+        });
+    });
+});
+
+// Optional: Add keyboard navigation for accessibility
+document.addEventListener('keydown', function(e) {
+    if (e.target.classList.contains('category-header') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        e.target.click();
+    }
+});
+
+    </script>
+</body>
+</html>

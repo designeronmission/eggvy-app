@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.dashboard-container {
+    max-width: 360px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+    padding-bottom: 98px;
+}
+
+/* Header Styles */
+.header {
+    background: white;
+    padding-top: 16px;
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 14px;
+    margin-bottom: 21px;
+}
+
+.time {
+    font-size: 13px;
+    color: #242424;
+    font-weight: 600;
+}
+
+.status-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.icon-signal,
+.icon-battery {
+    width: 20px;
+    height: 20px;
+}
+
+.header-card {
+    background: #5f2b80;
+    margin: 0 calc(50% - 173.5px);
+    padding: 16px 20px;
+    border-radius: 5px;
+    box-shadow: 4px 4px 15px 0px rgba(204, 207, 255, 0.68);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    height: 77px;
+}
+
+.profile-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.header-info {
+    flex: 1;
+}
+
+.greeting {
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.account-number {
+    font-size: 14px;
+    color: #eaeaea;
+    font-weight: 600;
+}
+
+.dropdown-arrow {
+    position: absolute;
+    left: 193px;
+    top: 48px;
+    transform: rotate(90deg);
+}
+
+.notification-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Main Content */
+.main-content {
+    padding: 30px 11px;
+}
+
+/* Alert Cards */
+.alert-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+
+.alert-card {
+    background: #f8edff;
+    border-radius: 7px;
+    padding: 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    height: 67px;
+}
+
+.alert-card.alert-red .alert-badge {
+    background: white;
+    color: #ff6565;
+}
+
+.alert-card.alert-green .alert-badge {
+    background: white;
+    color: #69802b;
+}
+
+.alert-badge {
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.alert-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+}
+
+.alert-amount {
+    background: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: auto;
+}
+
+.alert-amount.positive {
+    color: #2e8d3c;
+}
+
+.alert-amount.negative {
+    color: #ff6565;
+}
+
+.alert-button {
+    background: #5f2b80;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 7px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    position: absolute;
+    right: 12px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.alert-button:hover {
+    background: #4a2166;
+}
+
+/* Balance Card */
+.balance-card {
+    background: #5f2b80;
+    border-radius: 3px;
+    padding: 9px 11px;
+    margin-bottom: 30px;
+    width: 160px;
+}
+
+.balance-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+}
+
+.balance-amount {
+    color: #eaeaea;
+    font-size: 16px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-icon.calendar {
+    background: #DEE2FF;
+}
+
+.stat-icon.monthly {
+    background: #FEEAFA;
+}
+
+.stat-icon.money-in,
+.stat-icon.money-out {
+    background: transparent;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: black;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #1a1731;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Section Styles */
+.section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #22252c;
+    margin-bottom: 22px;
+}
+
+.section-title.center {
+    text-align: center;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+/* Bills Section */
+.bills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.bill-item {
+    background: #fcf7ff;
+    border-radius: 9px;
+    padding: 15px 20px;
+    position: relative;
+    height: 80px;
+}
+
+.bill-info {
+    margin-bottom: 10px;
+}
+
+.bill-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7c7c7c;
+    margin-bottom: 8px;
+}
+
+.bill-amount {
+    font-size: 19px;
+    font-weight: 600;
+    color: black;
+}
+
+.bill-badge {
+    position: absolute;
+    top: 15px;
+    left: 131px;
+    background: #ffeded;
+    color: #ce5b5b;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 60px;
+}
+
+.bill-badge.warning {
+    background: #fefff4;
+    color: #b7be30;
+    left: 112px;
+}
+
+.bill-arrow {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Goals Section */
+.create-button {
+    background: #5f2b80;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 17px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.create-button:hover {
+    background: #4a2166;
+}
+
+.goal-card {
+    background: #e7f2ff;
+    border-radius: 10px;
+    padding: 14px 12px;
+    position: relative;
+}
+
+.goal-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 35px;
+}
+
+.goal-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background: white;
+}
+
+.goal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: black;
+}
+
+.goal-progress {
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    background: white;
+    height: 15px;
+    border-radius: 110px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: #71a6e3;
+    height: 9px;
+    margin: 3px;
+    border-radius: 70px;
+}
+
+.goal-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 35px;
+}
+
+.goal-stat {
+    font-size: 12px;
+    font-weight: 600;
+    color: #747474;
+}
+
+.goal-stat span {
+    color: black;
+}
+
+.goal-details {
+    background: white;
+    border-radius: 6px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.goal-detail-item {
+    text-align: center;
+}
+
+.goal-detail-label {
+    font-size: 12px;
+    color: #747474;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.goal-detail-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: black;
+}
+
+/* Carousel */
+.carousel {
+    overflow-x: auto;
+    margin-bottom: 23px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 17px;
+    padding: 0 11px;
+}
+
+.offer-card {
+    min-width: 308px;
+    height: 245px;
+    border-radius: 13px;
+    padding: 21px 25px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.offer-card.blue {
+    background: #ebf2ff;
+}
+
+.offer-card.orange {
+    background: #fff1ea;
+}
+
+.offer-card.light-blue {
+    background: #daf1ff;
+}
+
+.offer-logo {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.offer-title {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    color: #22252c;
+    line-height: 1.67;
+    margin-bottom: 10px;
+}
+
+.offer-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    color: #707070;
+    line-height: 1.71;
+    margin-bottom: 20px;
+}
+
+.offer-button {
+    background: #5f2b80;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 42px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    position: absolute;
+}
+
+.offer-button:hover {
+    background: #4a2166;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 11px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #F2F2F2;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: #D9D9D9;
+}
+
+/* Category Cards */
+.category-card {
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 21px 16px;
+    margin-bottom: 25px;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.category-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.category-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: black;
+}
+
+.category-progress {
+    margin-bottom: 10px;
+}
+
+.progress-track {
+    position: relative;
+    height: 15px;
+    border-radius: 110px;
+}
+
+.progress-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 110px;
+}
+
+.progress-background.green {
+    background: #cdffdb;
+}
+
+.progress-used {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 70px;
+}
+
+.progress-used.red {
+    background: #ffe6e6;
+}
+
+.category-info {
+    position: relative;
+}
+
+.category-badge {
+    position: absolute;
+    top: -48px;
+    right: 0;
+    background: #f9efff;
+    padding: 9px 13px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: black;
+}
+
+.category-spending,
+.category-budget {
+    font-size: 15px;
+    font-weight: 600;
+    color: #373333;
+    display: inline-block;
+}
+
+.category-spending {
+    margin-right: 40px;
+}
+
+.category-legend {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.legend-color {
+    width: 19px;
+    height: 19px;
+    border-radius: 2px;
+}
+
+.legend-color.green {
+    background: #cdffdb;
+}
+
+.legend-color.red {
+    background: #ffe6e6;
+}
+
+.legend-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #686868;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    height: 98px;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+}
+
+.nav-item span {
+    font-size: 11px;
+    color: #22252C;
+    font-weight: 500;
+}
+
+.nav-item.active span {
+    color: #5F2B80;
+    font-weight: 600;
+}
+
+.nav-item svg {
+    width: 42px;
+    height: 42px;
+}
+
+/* Responsive Design */
+@media (max-width: 360px) {
+    .dashboard-container {
+        max-width: 100%;
+    }
+    
+    .bottom-nav {
+        width: 100%;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Inter:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="status-bar">
+                <p class="time">3.00 PM</p>
+                <div class="status-icons">
+                    <svg class="icon-signal" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3.08333 8.33333C3.08333 9.09722 3.21194 9.85778 3.46917 10.615C3.72639 11.3722 4.10472 12.07 4.60417 12.7083C4.72917 12.8611 4.79167 13.0383 4.79167 13.24C4.79167 13.4417 4.72222 13.6117 4.58333 13.75C4.44444 13.8883 4.27444 13.9508 4.07333 13.9375C3.87222 13.9242 3.70889 13.8408 3.58333 13.6875C2.94444 12.8958 2.46528 12.0486 2.14583 11.1458C1.82639 10.2431 1.66667 9.30555 1.66667 8.33333C1.66667 7.36111 1.82639 6.42361 2.14583 5.52083C2.46528 4.61806 2.94444 3.77083 3.58333 2.97917C3.70833 2.82639 3.87167 2.74306 4.07333 2.72917C4.275 2.71528 4.445 2.77778 4.58333 2.91667C4.72167 3.05556 4.79111 3.22556 4.79167 3.42667C4.79222 3.62778 4.72972 3.805 4.60417 3.95833C4.10417 4.59722 3.72583 5.29528 3.46917 6.0525C3.2125 6.80972 3.08389 7.57 3.08333 8.33333Z" fill="#242424"/>
+                    </svg>
+                    <svg class="icon-battery" width="25" height="12" viewBox="0 0 25 12" fill="none">
+                        <path d="M0 4.10714C0 3.96506 0.056438 3.8288 0.156904 3.72834C0.25737 3.62787 0.393638 3.57143 0.535714 3.57143C0.67779 3.57143 0.814057 3.62787 0.914523 3.72834C1.01499 3.8288 1.07143 3.96506 1.07143 4.10714V5H1.60714C1.74922 5 1.88549 5.05644 1.98595 5.15691C2.08642 5.25737 2.14286 5.39363 2.14286 5.53572V7.32143C2.14286 8.01143 1.58286 8.57143 0.892857 8.57143H0.178571V14.4643C0.178571 14.6064 0.122132 14.7426 0.021667 14.8431C-0.0787989 14.9436 -0.215066 15 -0.357143 15C-0.499219 15 -0.635486 14.9436 -0.735952 14.8431C-0.836417 14.7426 -0.892857 14.6064 -0.892857 14.4643V8.57143H-1.60714C-1.93866 8.57143 -2.25661 8.43973 -2.49103 8.20531C-2.72544 7.97089 -2.85714 7.65295 -2.85714 7.32143V5.53572C-2.85714 5.39363 -2.8007 5.25737 -2.70023 5.15691C-2.59977 5.05644 -2.4635 5 -2.32143 5H-1.78571V4.10714C-1.78571 3.96506 -1.72927 3.8288 -1.62881 3.72834C-1.52834 3.62787 -1.39208 3.57143 -1.25 3.57143C-1.10792 3.57143 -0.971653 3.62787 -0.871188 3.72834C-0.770723 3.8288 -0.714286 3.96506 -0.714286 4.10714V5H0V4.10714Z" fill="#242424"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="header-card">
+                <div class="profile-image">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='24' fill='%23EFEFEF'/%3E%3Cpath d='M24 24C27.3137 24 30 21.3137 30 18C30 14.6863 27.3137 12 24 12C20.6863 12 18 14.6863 18 18C18 21.3137 20.6863 24 24 24Z' fill='%235F2B80'/%3E%3Cpath d='M12 34C12 29.5817 15.5817 26 20 26H28C32.4183 26 36 29.5817 36 34V36H12V34Z' fill='%235F2B80'/%3E%3C/svg%3E" alt="Profile">
+                </div>
+                <div class="header-info">
+                    <h1 class="greeting">Hey James</h1>
+                    <p class="account-number">CHECKING - 1771</p>
+                    <svg class="dropdown-arrow" width="10" height="20" viewBox="0 0 10 20" fill="none">
+                        <path d="M1 5L5 9L9 5" stroke="white" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="notification-icon">
+                    <svg width="34" height="42" viewBox="0 0 34 42" fill="none">
+                        <circle cx="17" cy="21" r="17" fill="white"/>
+                        <path d="M17 13C14.2386 13 12 15.2386 12 18V23L10 25V26H24V25L22 23V18C22 15.2386 19.7614 13 17 13ZM15.5 28C15.5 28.8284 16.1716 29.5 17 29.5C17.8284 29.5 18.5 28.8284 18.5 28" stroke="#5F2B80" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Alert Cards -->
+            <div class="alert-cards">
+                <div class="alert-card alert-red">
+                    <div class="alert-badge">2</div>
+                    <p class="alert-title">Overspent Category</p>
+                    <button class="alert-button">Cover</button>
+                </div>
+                
+                <div class="alert-card alert-green">
+                    <div class="alert-badge green">4</div>
+                    <p class="alert-title">Uncleared Transactions</p>
+                    <button class="alert-button">Review</button>
+                </div>
+                
+                <div class="alert-card">
+                    <div class="alert-amount positive">$200.00</div>
+                    <p class="alert-title">Ready to Assign</p>
+                    <button class="alert-button">Assign</button>
+                </div>
+                
+                <div class="alert-card">
+                    <div class="alert-amount negative">-$200.00</div>
+                    <p class="alert-title">Over Assigned</p>
+                    <button class="alert-button">Fix</button>
+                </div>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <p class="balance-label">Balance: <span class="balance-amount">$ 1000.00</span></p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon calendar">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <rect x="4" y="6" width="20" height="18" rx="2" fill="none" stroke="#3B455A" stroke-width="2"/>
+                            <path d="M9 4V8M19 4V8M4 12H24" stroke="#3B455A" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <p class="stat-value">$ 11.02</p>
+                        <p class="stat-label">Average Daily Balance</p>
+                    </div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-icon monthly">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <rect x="4" y="6" width="20" height="18" rx="2" fill="none" stroke="#3B455A" stroke-width="2"/>
+                            <path d="M9 4V8M19 4V8M4 12H24" stroke="#3B455A" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <p class="stat-value">$ 1000.02</p>
+                        <p class="stat-label">Average Monthly Balance</p>
+                    </div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-icon money-in">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <circle cx="14" cy="14" r="13" stroke="#CECECE" stroke-width="2" fill="none"/>
+                            <path d="M14 8V20M8 14L14 8L20 14" stroke="#9AEBB5" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <p class="stat-value">$ 11.02</p>
+                        <p class="stat-label">Money In</p>
+                    </div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-icon money-out">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <circle cx="14" cy="14" r="13" stroke="#CECECE" stroke-width="2" fill="none"/>
+                            <path d="M14 20V8M8 14L14 20L20 14" stroke="#F48C7F" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <p class="stat-value">$ 11.02</p>
+                        <p class="stat-label">Money Out</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bills & Remainder Section -->
+            <div class="section">
+                <h2 class="section-title">Bills & Remainder</h2>
+                <div class="bills-list">
+                    <div class="bill-item">
+                        <div class="bill-info">
+                            <p class="bill-name">Credit Card Bills</p>
+                            <p class="bill-amount">$ 200.00</p>
+                        </div>
+                        <span class="bill-badge due">Today</span>
+                        <svg class="bill-arrow" width="8" height="13" viewBox="0 0 8 13" fill="none">
+                            <path d="M1 1L6 6.5L1 12" stroke="black" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="bill-item">
+                        <div class="bill-info">
+                            <p class="bill-name">Subscriptions</p>
+                            <p class="bill-amount">$ 182.00</p>
+                        </div>
+                        <span class="bill-badge warning">due in 2 days</span>
+                        <svg class="bill-arrow" width="8" height="13" viewBox="0 0 8 13" fill="none">
+                            <path d="M1 1L6 6.5L1 12" stroke="black" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Goals</h2>
+                    <button class="create-button">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <path d="M9 4V14M4 9H14" stroke="white" stroke-width="2"/>
+                        </svg>
+                        Create
+                    </button>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-icon">🚗</div>
+                        <h3 class="goal-title">Vehicle Goal</h3>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    <div class="goal-stats">
+                        <p class="goal-stat">Current Savings <span>$0.00</span></p>
+                        <p class="goal-stat">Target Goal <span>$0.00</span></p>
+                    </div>
+                    <div class="goal-details">
+                        <div class="goal-detail-item">
+                            <p class="goal-detail-label">Spent Amount</p>
+                            <p class="goal-detail-value">$0.00</p>
+                        </div>
+                        <div class="goal-detail-item">
+                            <p class="goal-detail-label">Still to Save</p>
+                            <p class="goal-detail-value">$0.00</p>
+                        </div>
+                        <div class="goal-detail-item">
+                            <p class="goal-detail-label">Target Date</p>
+                            <p class="goal-detail-value">Oct 2026</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Handpicked for You Section -->
+            <div class="section">
+                <h2 class="section-title">Handpicked for You</h2>
+                <div class="carousel">
+                    <div class="carousel-track">
+                        <div class="offer-card blue">
+                            <div class="offer-logo">
+                                <svg width="40" height="12" viewBox="0 0 40 12" fill="none">
+                                    <text x="0" y="10" font-family="Arial" font-size="10" fill="#5F2B80">LOGO</text>
+                                </svg>
+                            </div>
+                            <h3 class="offer-title">Your One-Stop Financial Solution</h3>
+                            <p class="offer-subtitle">Any type of loan at cheapest interest Starting at 9.**% p.a</p>
+                            <button class="offer-button">Explore</button>
+                        </div>
+                        
+                        <div class="offer-card orange">
+                            <div class="offer-logo">💰</div>
+                            <h3 class="offer-title">Instant Cash When You Need It Most</h3>
+                            <p class="offer-subtitle">Explore Money service and Personal loan offers</p>
+                            <button class="offer-button">Apply Now</button>
+                        </div>
+                        
+                        <div class="offer-card light-blue">
+                            <div class="offer-logo">💵</div>
+                            <h3 class="offer-title">Any type of loan at cheapest interest Starting at 9.**% p.a</h3>
+                            <button class="offer-button">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+
+            <!-- Positive Inflow Categories Section -->
+            <div class="section">
+                <h2 class="section-title center">Positive Inflow Categories</h2>
+                
+                <div class="category-card">
+                    <div class="category-header">
+                        <svg class="category-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <path d="M2 8L9 2L16 8V16H11V11H7V16H2V8Z" fill="#5F2B80"/>
+                        </svg>
+                        <h3 class="category-name">Rent</h3>
+                    </div>
+                    <div class="category-progress">
+                        <div class="progress-track">
+                            <div class="progress-background green"></div>
+                            <div class="progress-used red" style="width: 59%"></div>
+                        </div>
+                    </div>
+                    <div class="category-info">
+                        <span class="category-badge">Amount Saved: $50.00</span>
+                        <p class="category-spending">Spendings $200.00</p>
+                        <p class="category-budget">Budget $250</p>
+                    </div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-header">
+                        <svg class="category-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <path d="M2 8L9 2L16 8V16H11V11H7V16H2V8Z" fill="#5F2B80"/>
+                        </svg>
+                        <h3 class="category-name">Shopping</h3>
+                    </div>
+                    <div class="category-progress">
+                        <div class="progress-track">
+                            <div class="progress-background green"></div>
+                            <div class="progress-used red" style="width: 83%"></div>
+                        </div>
+                    </div>
+                    <div class="category-info">
+                        <span class="category-badge">Amount Saved: $10.00</span>
+                        <p class="category-spending">Spendings $190.00</p>
+                        <p class="category-budget">Budget $200</p>
+                    </div>
+                </div>
+                
+                <div class="category-legend">
+                    <div class="legend-item">
+                        <span class="legend-color green"></span>
+                        <span class="legend-label">Budget</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color red"></span>
+                        <span class="legend-label">Spendings</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-item active">
+                <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                    <circle cx="21" cy="21" r="21" fill="#5F2B80"/>
+                    <path d="M21 14L15 20H18V28H24V20H27L21 14Z" fill="white"/>
+                </svg>
+                <span>Dashboard</span>
+            </button>
+            
+            <button class="nav-item">
+                <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                    <circle cx="21" cy="21" r="21" fill="white"/>
+                    <path d="M15 18L21 12L27 18M15 24L21 18L27 24" stroke="#22252C" stroke-width="2" fill="none"/>
+                </svg>
+                <span>Insights</span>
+            </button>
+            
+            <button class="nav-item">
+                <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                    <circle cx="21" cy="21" r="21" fill="white"/>
+                    <rect x="15" y="15" width="6" height="6" fill="#22252C"/>
+                    <rect x="15" y="23" width="6" height="6" fill="#22252C"/>
+                    <rect x="23" y="15" width="6" height="6" fill="#22252C"/>
+                    <rect x="23" y="23" width="6" height="6" fill="#22252C"/>
+                </svg>
+                <span>Budget</span>
+            </button>
+            
+            <button class="nav-item">
+                <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                    <circle cx="21" cy="21" r="21" fill="white"/>
+                    <circle cx="21" cy="21" r="5" fill="#22252C"/>
+                    <path d="M21 12V16M21 26V30M30 21H26M16 21H12" stroke="#22252C" stroke-width="2"/>
+                </svg>
+                <span>Goals</span>
+            </button>
+            
+            <button class="nav-item">
+                <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                    <circle cx="21" cy="21" r="21" fill="white"/>
+                    <path d="M21 16C18.24 16 16 18.24 16 21C16 23.76 18.24 26 21 26C23.76 26 26 23.76 26 21C26 18.24 23.76 16 21 16ZM21 24C19.35 24 18 22.65 18 21C18 19.35 19.35 18 21 18C22.65 18 24 19.35 24 21C24 22.65 22.65 24 21 24Z" fill="#22252C"/>
+                </svg>
+                <span>Settings</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Carousel functionality
+const carousel = document.querySelector('.carousel');
+const track = document.querySelector('.carousel-track');
+const dots = document.querySelectorAll('.dot');
+const cards = document.querySelectorAll('.offer-card');
+
+let currentIndex = 0;
+
+// Update carousel position
+function updateCarousel(index) {
+    const cardWidth = cards[0].offsetWidth;
+    const gap = 17;
+    const scrollPosition = index * (cardWidth + gap);
+    
+    carousel.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+    });
+    
+    // Update dots
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+    
+    currentIndex = index;
+}
+
+// Dot click handlers
+dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+        updateCarousel(index);
+    });
+});
+
+// Scroll snap detection
+let scrollTimeout;
+carousel.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        const cardWidth = cards[0].offsetWidth;
+        const gap = 17;
+        const scrollLeft = carousel.scrollLeft;
+        const newIndex = Math.round(scrollLeft / (cardWidth + gap));
+        
+        if (newIndex !== currentIndex && newIndex >= 0 && newIndex < dots.length) {
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === newIndex);
+            });
+            currentIndex = newIndex;
+        }
+    }, 150);
+});
+
+// Navigation functionality
+const navItems = document.querySelectorAll('.nav-item');
+
+navItems.forEach(item => {
+    item.addEventListener('click', function() {
+        // Remove active class from all items
+        navItems.forEach(nav => nav.classList.remove('active'));
+        // Add active class to clicked item
+        this.classList.add('active');
+        
+        // Get the navigation label
+        const navLabel = this.querySelector('span').textContent;
+        console.log(`Navigating to: ${navLabel}`);
+        
+        // You can add actual navigation logic here
+        // For example, scrolling to different sections or loading different views
+    });
+});
+
+// Button click handlers with feedback
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach(button => {
+    button.addEventListener('click', function(e) {
+        // Visual feedback
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            this.style.transform = 'scale(1)';
+        }, 100);
+        
+        // Log action
+        const buttonText = this.textContent.trim();
+        console.log(`Button clicked: ${buttonText}`);
+    });
+});
+
+// Alert card interactions
+const alertCards = document.querySelectorAll('.alert-card');
+
+alertCards.forEach(card => {
+    const button = card.querySelector('.alert-button');
+    
+    if (button) {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const action = this.textContent;
+            const title = card.querySelector('.alert-title').textContent;
+            
+            console.log(`Action: ${action} for ${title}`);
+            
+            // Show a simple confirmation
+            this.textContent = '✓ Done';
+            this.style.background = '#2e8d3c';
+            
+            setTimeout(() => {
+                this.textContent = action;
+                this.style.background = '#5f2b80';
+            }, 1500);
+        });
+    }
+});
+
+// Bill item interactions
+const billItems = document.querySelectorAll('.bill-item');
+
+billItems.forEach(item => {
+    item.addEventListener('click', function() {
+        const billName = this.querySelector('.bill-name').textContent;
+        const billAmount = this.querySelector('.bill-amount').textContent;
+        
+        console.log(`Bill clicked: ${billName} - ${billAmount}`);
+        
+        // Add a visual feedback
+        this.style.background = '#f0e8f7';
+        setTimeout(() => {
+            this.style.background = '#fcf7ff';
+        }, 200);
+    });
+});
+
+// Create button handler
+const createButton = document.querySelector('.create-button');
+
+if (createButton) {
+    createButton.addEventListener('click', function() {
+        console.log('Create new goal clicked');
+        
+        // Show alert (in a real app, this would open a modal)
+        alert('Create New Goal\n\nThis would open a form to create a new savings goal.');
+    });
+}
+
+// Goal card interaction
+const goalCard = document.querySelector('.goal-card');
+
+if (goalCard) {
+    goalCard.addEventListener('click', function(e) {
+        // Only if not clicking a button
+        if (!e.target.closest('button')) {
+            console.log('Goal card clicked');
+            
+            // Add hover effect on click for touch devices
+            this.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        }
+    });
+}
+
+// Category card interactions
+const categoryCards = document.querySelectorAll('.category-card');
+
+categoryCards.forEach(card => {
+    card.addEventListener('click', function() {
+        const categoryName = this.querySelector('.category-name').textContent;
+        console.log(`Category clicked: ${categoryName}`);
+        
+        // Highlight effect
+        this.style.background = '#eeeeee';
+        setTimeout(() => {
+            this.style.background = '#f7f7f7';
+        }, 200);
+    });
+});
+
+// Time update (optional - update the time display)
+function updateTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    const displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+    
+    const timeElement = document.querySelector('.time');
+    if (timeElement) {
+        timeElement.textContent = `${displayHours}.${displayMinutes} ${ampm}`;
+    }
+}
+
+// Update time immediately and then every minute
+updateTime();
+setInterval(updateTime, 60000);
+
+// Add smooth scroll behavior
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Notification icon interaction
+const notificationIcon = document.querySelector('.notification-icon');
+
+if (notificationIcon) {
+    notificationIcon.addEventListener('click', function() {
+        console.log('Notifications clicked');
+        
+        // Add pulse animation
+        this.style.animation = 'pulse 0.3s ease-in-out';
+        setTimeout(() => {
+            this.style.animation = '';
+        }, 300);
+        
+        // In a real app, this would open notifications panel
+        alert('Notifications\n\n• Credit Card bill due today\n• New goal milestone reached\n• Budget reminder');
+    });
+}
+
+// Profile image interaction
+const profileImage = document.querySelector('.profile-image');
+
+if (profileImage) {
+    profileImage.addEventListener('click', function() {
+        console.log('Profile clicked');
+        alert('Profile Settings\n\nThis would open your profile settings.');
+    });
+}
+
+// Add CSS animation for pulse effect
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    button {
+        transition: transform 0.1s ease, background 0.2s ease;
+    }
+    
+    .alert-card,
+    .bill-item,
+    .category-card,
+    .goal-card {
+        transition: background 0.2s ease, transform 0.2s ease;
+        cursor: pointer;
+    }
+    
+    .alert-card:hover,
+    .bill-item:hover,
+    .category-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-item:hover svg {
+        transform: scale(1.1);
+        transition: transform 0.2s ease;
+    }
+    
+    .offer-button:active,
+    .alert-button:active,
+    .create-button:active {
+        transform: scale(0.95);
+    }
+`;
+document.head.appendChild(style);
+
+// Console welcome message
+console.log('%c💰 Financial Dashboard Loaded!', 'font-size: 20px; color: #5f2b80; font-weight: bold;');
+console.log('%cInteractive features:', 'font-size: 14px; color: #22252c; font-weight: bold;');
+console.log('• Click navigation items to switch views');
+console.log('• Click alert buttons to take actions');
+console.log('• Click bills to view details');
+console.log('• Scroll carousel or click dots to navigate offers');
+console.log('• Click notification bell for alerts');
+console.log('• Click profile image for settings');
+
+// Prevent default drag behavior on images
+document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('dragstart', (e) => e.preventDefault());
+});
+
+// Add loading complete event
+window.addEventListener('load', () => {
+    console.log('Dashboard fully loaded and interactive!');
+    
+    // Optional: Add entrance animations
+    const cards = document.querySelectorAll('.alert-card, .stat-item, .bill-item');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 50);
+    });
+});
+
+    </script>
+</body>
+</html>
